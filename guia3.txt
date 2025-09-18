@@ -1,0 +1,454 @@
+1) Crear un programa que permita registrar compras de productos de una tienda. Por cada compra
+se debe registrar:
+a. Nombre de Producto
+b. Cantidad que lleva
+c. Precio unitario del producto
+Debe usar vectores paralelos, recuerde que si se ingresa un producto que previamente fue
+ingresado, solo actualizara la cantidad. Al final el programa mostrará el total de la compra.
+
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        List<string> productos = new List<string>();
+        List<int> cantidades = new List<int>();
+        List<decimal> precios = new List<decimal>();
+        
+        Console.WriteLine("SISTEMA DE REGISTRO DE COMPRAS");
+        Console.WriteLine("Ingrese 'fin' para terminar\n");
+        
+        while (true)
+        {
+            Console.Write("Nombre del producto: ");
+            string producto = Console.ReadLine();
+            
+            if (producto.ToLower() == "fin") break;
+            
+            Console.Write("Cantidad: ");
+            int cantidad = int.Parse(Console.ReadLine());
+            
+            Console.Write("Precio unitario: ");
+            decimal precio = decimal.Parse(Console.ReadLine());
+            
+            // Verificar si el producto ya existe
+            int indice = productos.IndexOf(producto);
+            if (indice != -1)
+            {
+                // Actualizar cantidad si ya existe
+                cantidades[indice] += cantidad;
+                Console.WriteLine($"Producto actualizado: {producto} - Cantidad total: {cantidades[indice]}");
+            }
+            else
+            {
+                // Agregar nuevo producto
+                productos.Add(producto);
+                cantidades.Add(cantidad);
+                precios.Add(precio);
+                Console.WriteLine($"Producto agregado: {producto}");
+            }
+            Console.WriteLine();
+        }
+        
+        // Calcular total de la compra
+        decimal total = 0;
+        Console.WriteLine("\nRESUMEN DE COMPRA:");
+        Console.WriteLine("==================");
+        
+        for (int i = 0; i < productos.Count; i++)
+        {
+            decimal subtotal = cantidades[i] * precios[i];
+            total += subtotal;
+            Console.WriteLine($"{productos[i]} - {cantidades[i]} x {precios[i]:C} = {subtotal:C}");
+        }
+        
+        Console.WriteLine($"\nTOTAL DE LA COMPRA: {total:C}");
+    }
+}
+
+
+
+
+2 ) Crear un programa que muestre en consola el contenido de una matriz, cuyos valores fueron
+previamente guardados a nivel de código. Usar bucles for para guardar los siguientes valores en
+la matriz.
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int[,] matriz = {
+            {0, 1, 0, 1},
+            {0, 1, 1, 0},
+            {0, 1, 1, 0},
+            {1, 0, 0, 1}
+        };
+        
+        Console.WriteLine("MATRIZ:");
+        Console.WriteLine("=======");
+        
+        int filas = matriz.GetLength(0);
+        int columnas = matriz.GetLength(1);
+        
+        for (int i = 0; i < filas; i++)
+        {
+            for (int j = 0; j < columnas; j++)
+            {
+                Console.Write(matriz[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+}
+
+3) Investigar cómo generar números aleatorios, Posteriormente crear un programa que llene con
+números enteros de forma aleatoria una matriz de 5x5 y pida un número a buscar e imprima si
+fue encontrado y su índice o si no fue encontrado.
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        Random random = new Random();
+        int[,] matriz = new int[365, 1]; // Matriz de 365x1
+        
+        // Llenar matriz con números aleatorios (0-999)
+        for (int i = 0; i < 365; i++)
+        {
+            matriz[i, 0] = random.Next(1000);
+        }
+        
+        Console.Write("Ingrese número a buscar (0-999): ");
+        int numeroBuscado = int.Parse(Console.ReadLine());
+        
+        bool encontrado = false;
+        int posicion = -1;
+        
+        // Buscar el número
+        for (int i = 0; i < 365; i++)
+        {
+            if (matriz[i, 0] == numeroBuscado)
+            {
+                encontrado = true;
+                posicion = i;
+                break;
+            }
+        }
+        
+        if (encontrado)
+        {
+            Console.WriteLine($"Número {numeroBuscado} encontrado en la posición {posicion}");
+        }
+        else
+        {
+            Console.WriteLine($"Número {numeroBuscado} no encontrado");
+        }
+    }
+}
+
+
+
+
+4) Crear un programa que pida datos al usuario, de tal forma que llene un vector de 10 elementos.
+El programa al final imprimirá:
+a. Cuál es el número mayor ingresado
+b. Cuál es el número menor ingresado
+c. El promedio de los números ingresados.
+d. Cuantos y cuales números pares hay.
+e. Cuantos y cuales números impares hay.
+
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        int[] numeros = new int[10];
+        
+        Console.WriteLine("Ingrese 10 números:");
+        
+        for (int i = 0; i < 10; i++)
+        {
+            Console.Write($"Número {i + 1}: ");
+            numeros[i] = int.Parse(Console.ReadLine());
+        }
+        
+        // Análisis
+        int mayor = numeros[0];
+        int menor = numeros[0];
+        int suma = 0;
+        List<int> pares = new List<int>();
+        List<int> impares = new List<int>();
+        
+        foreach (int num in numeros)
+        {
+            if (num > mayor) mayor = num;
+            if (num < menor) menor = num;
+            suma += num;
+            
+            if (num % 2 == 0)
+                pares.Add(num);
+            else
+                impares.Add(num);
+        }
+        
+        double promedio = (double)suma / numeros.Length;
+        
+        // Resultados
+        Console.WriteLine("\nRESULTADOS:");
+        Console.WriteLine("===========");
+        Console.WriteLine($"Número mayor: {mayor}");
+        Console.WriteLine($"Número menor: {menor}");
+        Console.WriteLine($"Promedio: {promedio:F2}");
+        Console.WriteLine($"Números pares ({pares.Count}): {string.Join(", ", pares)}");
+        Console.WriteLine($"Números impares ({impares.Count}): {string.Join(", ", impares)}");
+    }
+}
+
+
+
+
+5) Crear un programa que muestre un menú de opciones que permita:
+a. Llenar un vector de tipo string con 5 nombres de personas.
+b. Debe permitir buscar un nombre e imprimir si existe o no.
+c. Debe permitir eliminar un nombre (correr una posición …)
+d. Debe permitir modificar un nombre
+e. Debe permitir mostrar todo el contenido del arreglo.
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        string[] nombres = new string[5];
+        int cantidadNombres = 0;
+        bool salir = false;
+
+        Console.WriteLine("SISTEMA DE GESTIÓN DE NOMBRES");
+        Console.WriteLine("=============================");
+
+        while (!salir)
+        {
+            MostrarMenu();
+            Console.Write("Seleccione una opción: ");
+            
+            if (int.TryParse(Console.ReadLine(), out int opcion))
+            {
+                switch (opcion)
+                {
+                    case 1:
+                        LlenarVector(nombres, ref cantidadNombres);
+                        break;
+                    case 2:
+                        BuscarNombre(nombres, cantidadNombres);
+                        break;
+                    case 3:
+                        EliminarNombre(nombres, ref cantidadNombres);
+                        break;
+                    case 4:
+                        ModificarNombre(nombres, cantidadNombres);
+                        break;
+                    case 5:
+                        MostrarNombres(nombres, cantidadNombres);
+                        break;
+                    case 6:
+                        salir = true;
+                        Console.WriteLine("¡Hasta luego!");
+                        break;
+                    default:
+                        Console.WriteLine("Opción inválida. Intente nuevamente.");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Por favor, ingrese un número válido.");
+            }
+
+            Console.WriteLine("\nPresione cualquier tecla para continuar...");
+            Console.ReadKey();
+            Console.Clear();
+        }
+    }
+
+    static void MostrarMenu()
+    {
+        Console.WriteLine("\nMENÚ DE OPCIONES:");
+        Console.WriteLine("1. Llenar vector con 5 nombres");
+        Console.WriteLine("2. Buscar un nombre");
+        Console.WriteLine("3. Eliminar un nombre");
+        Console.WriteLine("4. Modificar un nombre");
+        Console.WriteLine("5. Mostrar todos los nombres");
+        Console.WriteLine("6. Salir");
+    }
+
+    static void LlenarVector(string[] nombres, ref int cantidad)
+    {
+        if (cantidad == 5)
+        {
+            Console.WriteLine("El vector ya está lleno. ¿Desea sobrescribir los nombres? (s/n)");
+            string respuesta = Console.ReadLine().ToLower();
+            
+            if (respuesta != "s")
+                return;
+        }
+
+        cantidad = 0;
+        Console.WriteLine("Ingrese 5 nombres:");
+
+        for (int i = 0; i < 5; i++)
+        {
+            Console.Write($"Nombre {i + 1}: ");
+            string nombre = Console.ReadLine().Trim();
+            
+            if (!string.IsNullOrEmpty(nombre))
+            {
+                nombres[i] = nombre;
+                cantidad++;
+            }
+            else
+            {
+                Console.WriteLine("Nombre no válido. Intente nuevamente.");
+                i--; // Repetir esta posición
+            }
+        }
+
+        Console.WriteLine("Vector llenado correctamente.");
+    }
+
+    static void BuscarNombre(string[] nombres, int cantidad)
+    {
+        if (cantidad == 0)
+        {
+            Console.WriteLine("El vector está vacío. No hay nombres para buscar.");
+            return;
+        }
+
+        Console.Write("Ingrese el nombre a buscar: ");
+        string nombreBuscado = Console.ReadLine().Trim().ToLower();
+
+        bool encontrado = false;
+        for (int i = 0; i < cantidad; i++)
+        {
+            if (nombres[i].ToLower() == nombreBuscado)
+            {
+                Console.WriteLine($"✓ Nombre encontrado en la posición {i + 1}");
+                encontrado = true;
+                break;
+            }
+        }
+
+        if (!encontrado)
+        {
+            Console.WriteLine("✗ Nombre no encontrado en el vector.");
+        }
+    }
+
+    static void EliminarNombre(string[] nombres, ref int cantidad)
+    {
+        if (cantidad == 0)
+        {
+            Console.WriteLine("El vector está vacío. No hay nombres para eliminar.");
+            return;
+        }
+
+        Console.Write("Ingrese el nombre a eliminar: ");
+        string nombreEliminar = Console.ReadLine().Trim().ToLower();
+
+        int posicion = -1;
+        for (int i = 0; i < cantidad; i++)
+        {
+            if (nombres[i].ToLower() == nombreEliminar)
+            {
+                posicion = i;
+                break;
+            }
+        }
+
+        if (posicion == -1)
+        {
+            Console.WriteLine("Nombre no encontrado.");
+            return;
+        }
+
+        // Correr los elementos una posición hacia la izquierda
+        for (int i = posicion; i < cantidad - 1; i++)
+        {
+            nombres[i] = nombres[i + 1];
+        }
+
+        // Limpiar la última posición
+        nombres[cantidad - 1] = null;
+        cantidad--;
+
+        Console.WriteLine("Nombre eliminado correctamente.");
+    }
+
+    static void ModificarNombre(string[] nombres, int cantidad)
+    {
+        if (cantidad == 0)
+        {
+            Console.WriteLine("El vector está vacío. No hay nombres para modificar.");
+            return;
+        }
+
+        Console.Write("Ingrese el nombre a modificar: ");
+        string nombreViejo = Console.ReadLine().Trim().ToLower();
+
+        int posicion = -1;
+        for (int i = 0; i < cantidad; i++)
+        {
+            if (nombres[i].ToLower() == nombreViejo)
+            {
+                posicion = i;
+                break;
+            }
+        }
+
+        if (posicion == -1)
+        {
+            Console.WriteLine("Nombre no encontrado.");
+            return;
+        }
+
+        Console.Write($"Ingrese el nuevo nombre para '{nombres[posicion]}': ");
+        string nuevoNombre = Console.ReadLine().Trim();
+        
+        if (!string.IsNullOrEmpty(nuevoNombre))
+        {
+            nombres[posicion] = nuevoNombre;
+            Console.WriteLine("Nombre modificado correctamente.");
+        }
+        else
+        {
+            Console.WriteLine("Nombre no válido. No se realizó la modificación.");
+        }
+    }
+
+    static void MostrarNombres(string[] nombres, int cantidad)
+    {
+        if (cantidad == 0)
+        {
+            Console.WriteLine("El vector está vacío.");
+            return;
+        }
+
+        Console.WriteLine("NOMBRES EN EL VECTOR:");
+        Console.WriteLine("=====================");
+
+        for (int i = 0; i < cantidad; i++)
+        {
+            Console.WriteLine($"{i + 1}. {nombres[i]}");
+        }
+
+        Console.WriteLine($"\nTotal de nombres: {cantidad}");
+    }
+}
